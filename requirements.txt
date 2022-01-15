@@ -1,3 +1,8 @@
 # Package dependencies are stored in setup.py.
 # For more information, see <https://github.com/ammaraskar/pyCraft/pull/156>.
 -e .
+
+PyNBT~=3.1.0
+cryptography~=36.0.1
+requests~=2.27.1
+setuptools~=57.0.0

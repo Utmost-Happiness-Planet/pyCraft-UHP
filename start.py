@@ -17,6 +17,10 @@ def get_options():
     parser.add_option("-u", "--username", dest="username", default=None,
                       help="username to log in with")
 
+    parser.add_option("-m", "--microsoft", dest="microToken", default=None,
+                      help="The Token of Microsoft. You can get it from \n https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_typ"
+                           "e=code&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf")
+
     parser.add_option("-p", "--password", dest="password", default=None,
                       help="password to log in with")
 
@@ -69,12 +73,20 @@ def main():
             options.address, options.port, username=options.username)
     else:
         auth_token = authentication.AuthenticationToken()
-        try:
-            auth_token.authenticate(options.username, options.password)
-        except YggdrasilError as e:
-            print(e)
-            sys.exit()
-        print("Logged in as %s..." % auth_token.username)
+        if options.microToken:
+            try:
+                auth_token.microsoftAuthenticate(options.microToken)
+            except YggdrasilError as e:
+                print(e)
+                sys.exit()
+            print("Logged in as %s..." % auth_token.username)
+        else:
+            try:
+                auth_token.authenticate(options.username, options.password)
+            except YggdrasilError as e:
+                print(e)
+                sys.exit()
+            print("Logged in as %s..." % auth_token.username)
         connection = Connection(
             options.address, options.port, auth_token=auth_token)
 
