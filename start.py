@@ -3,6 +3,7 @@
 import getpass
 import sys
 import re
+import pickle
 from optparse import OptionParser
 
 from minecraft import authentication
@@ -24,6 +25,15 @@ def get_options():
     parser.add_option("-p", "--password", dest="password", default=None,
                       help="password to log in with")
 
+    parser.add_option("-t", "--token", dest="token", default=None,
+                      help="Minecraft Token")
+
+    parser.add_option("--UUID", dest="uuid", default=None,
+                      help="Minecraft UUID")
+
+    parser.add_option("-f", "--file", dest="file", action="store_true",
+                      help="Use information file(LOGIN_INFO that save by --save argument) to login")
+
     parser.add_option("-s", "--server", dest="server", default=None,
                       help="server host or host:port "
                            "(enclose IPv6 addresses in square brackets)")
@@ -31,6 +41,9 @@ def get_options():
     parser.add_option("-o", "--offline", dest="offline", action="store_true",
                       help="connect to a server in offline mode "
                            "(no password required)")
+
+    parser.add_option("--save", dest="save", action="store_true",
+                      help="Save login information in a file.")
 
     parser.add_option("-d", "--dump-packets", dest="dump_packets",
                       action="store_true",
@@ -41,6 +54,21 @@ def get_options():
                       help="include unknown packets in --dump-packets output")
 
     (options, args) = parser.parse_args()
+
+    if options.file:
+        options.username = "_"
+        options.password = "_"
+
+    if options.microToken:
+        options.username = "_"
+        options.password = "_"
+        if options.microToken == '*':
+            print("https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_typ"
+                  "e=code&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf")
+            options.microToken = input("Microsoft Token: ")
+
+    if options.token and options.uuid:
+        options.password = "_"
 
     if not options.username:
         options.username = input("Enter your username: ")
@@ -73,13 +101,23 @@ def main():
             options.address, options.port, username=options.username)
     else:
         auth_token = authentication.AuthenticationToken()
-        if options.microToken:
+        if options.file:
+            with open("LOGIN_INFO", "rb") as f:
+                auth_token = pickle.load(f)
+        elif options.token and options.uuid:
+            auth_token.DirectToken(options.username, options.token, options.uuid)
+            print("Logged in as %s..." % auth_token.username)
+            print("Minecraft Token is:\n%s" % auth_token.access_token)
+            print("UUID is:\n%s" % auth_token.profile.id_)
+        elif options.microToken:
             try:
                 auth_token.microsoftAuthenticate(options.microToken)
             except YggdrasilError as e:
                 print(e)
                 sys.exit()
             print("Logged in as %s..." % auth_token.username)
+            print("Minecraft Token is:\n%s" % auth_token.access_token)
+            print("UUID is:\n%s" % auth_token.profile.id_)
         else:
             try:
                 auth_token.authenticate(options.username, options.password)
@@ -87,6 +125,11 @@ def main():
                 print(e)
                 sys.exit()
             print("Logged in as %s..." % auth_token.username)
+
+        if options.save:
+            with open("LOGIN_INFO", "wb") as f:
+                pickle.dump(auth_token, f)
+
         connection = Connection(
             options.address, options.port, auth_token=auth_token)
 

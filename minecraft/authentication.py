@@ -143,6 +143,14 @@ class AuthenticationToken(object):
         self.profile.name = resp[2]
         return True
 
+    def DirectToken(self, username, access_token, id_):
+        self.username = username
+        self.access_token = access_token
+        self.client_token = uuid.uuid4().hex
+        self.profile.id_ = id_
+        self.profile.name = username
+        return True
+
     def refresh(self):
         """
         Refreshes the `AuthenticationToken`. Used to keep a user logged in
