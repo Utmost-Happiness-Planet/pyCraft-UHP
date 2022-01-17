@@ -2,7 +2,7 @@
     
   # pyCraft-UHP
   
-  ✨ A awesome headless Minecraft Client. ✨
+  ✨ A awesome headless Minecraft Client adapted to UHP server. ✨
 </div>
 
 ### 环境准备
