@@ -42,15 +42,3 @@ python ./start.py -f
 ```
 
 即可自动读取`LOGIN_INFO`文件实现快速登录。
-
-### TODO
-
-目前该项目可连接至原版Minecraft服务器。
-
-```python
-39.99.130.154:25565  # 试验田
-```
-
-但连接UHP服务器时会报错。
-
-需要修复。 **@SakuraPuare @mccube2000**
