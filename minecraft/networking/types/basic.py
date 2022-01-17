@@ -64,7 +64,11 @@ class Boolean(Type):
 class UnsignedByte(Type):
     @staticmethod
     def read(file_object):
-        return struct.unpack('>B', file_object.read(1))[0]
+        data = file_object.read(1)
+        if len(data):
+            return struct.unpack('>B', data)[0]
+        else:
+            return 0
 
     @staticmethod
     def send(value, socket):

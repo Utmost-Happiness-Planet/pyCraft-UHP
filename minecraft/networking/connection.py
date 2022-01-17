@@ -692,8 +692,6 @@ class PacketReactor(object):
             # otherwise, just return an instance of the base Packet class.
             if packet_id in self.clientbound_packets:
                 packet = self.clientbound_packets[packet_id]()
-                if packet.packet_name == 'map':
-                    return None
                 packet.context = self.connection.context
                 packet.read(packet_data)
             else:
