@@ -70,3 +70,8 @@ def GetLoginInfo(accessCode: str) -> list:
     MineToken = minecraft(XSL_token, uhs)
     ID, Name = getUuid(MineToken)
     return [MineToken, ID, Name]
+
+
+if __name__ == '__main__':
+    text = input()
+    GetLoginInfo(text)
