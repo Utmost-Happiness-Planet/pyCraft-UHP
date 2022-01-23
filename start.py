@@ -11,8 +11,7 @@ from minecraft.exceptions import YggdrasilError
 from minecraft.networking.connection import Connection
 from minecraft.networking.packets import Packet, clientbound, serverbound
 
-from minecraft.networking.packets.clientbound.play import PlayerPositionAndLookPacket
-from minecraft.networking.packets.serverbound.play import PositionAndLookPacket
+from minecraft.backend import register_backend
 
 
 def get_options():
@@ -165,43 +164,13 @@ def main():
         print("Message (%s): %s" % (
             chat_packet.field_string('position'), chat_packet.json_data))
 
-    connection.register_packet_listener(
-        print_chat, clientbound.play.ChatMessagePacket)
+    connection.register_packet_listener(print_chat, clientbound.play.ChatMessagePacket)
 
     connection.connect()
 
-    @connection.listener(PlayerPositionAndLookPacket)
-    def print_chat(_packet):
-        print(_packet)
-
-    # @connection.listener(PositionAndLookPacket, outgoing=True)
-    # def print_chat(_packet):
-    #     print(_packet)
-
     return connection
-    # while True:
-    #     try:
-    #         text = input()
-    #         if text == "/respawn":
-    #             print("respawning...")
-    #             packet = serverbound.play.ClientStatusPacket()
-    #             packet.action_id = serverbound.play.ClientStatusPacket.RESPAWN
-    #             connection.write_packet(packet)
-    #         else:
-    #             packet = serverbound.play.ChatPacket()
-    #             packet.message = text
-    #             connection.write_packet(packet)
-    #     except KeyboardInterrupt:
-    #         print("Bye!")
-    #         sys.exit()
 
 
 if __name__ == "__main__":
-    c = main()
-    p = PositionAndLookPacket()
-    p.x = 7.0
-    p.feet_y = 41.0
-    p.z = 13.0
-    p.yaw = -58.0
-    p.pitch = 55.0
-    p.on_ground = True
+    connection = main()
+    player = register_backend(connection)
