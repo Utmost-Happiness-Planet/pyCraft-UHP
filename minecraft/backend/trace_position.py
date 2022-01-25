@@ -9,7 +9,7 @@ def register_connection(c: Connection, player: Player):
 
     @connection.listener(PlayerPositionAndLookPacket)
     def print_position(_p):
-        print("Move too fast!!!")
+        print(f"玩家定位：x={_p.x}, y={_p.y}, z={_p.z}")
         player.update_pos([_p.x, _p.y, _p.z])
         player.update_rotation([_p.yaw, _p.pitch])
 
