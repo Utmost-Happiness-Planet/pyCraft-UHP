@@ -1,6 +1,8 @@
-import requests
 import json
 import uuid
+
+import requests
+
 from .exceptions import YggdrasilError
 from .MicrosoftAuthentication import GetLoginInfo
 

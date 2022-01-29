@@ -3,8 +3,8 @@ A modern, Python3-compatible, well-documented library for communicating
 with a MineCraft server.
 """
 
-from collections import OrderedDict, namedtuple
 import re
+from collections import OrderedDict, namedtuple
 
 # The version number of the most recent pyCraft release.
 __version__ = "0.7.0"

@@ -1,4 +1,5 @@
 from setuptools import setup
+
 from minecraft import __version__
 
 
