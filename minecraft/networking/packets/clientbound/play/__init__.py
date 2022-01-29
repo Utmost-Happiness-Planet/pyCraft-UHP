@@ -426,3 +426,18 @@ class ResourcePackSendPacket(Packet):
             {"forced_message": String}
             if context.protocol_later_eq(PRE | 15) else {},
         ]
+
+
+class WindowItemsPacket(Packet):
+    @staticmethod
+    def get_id(context):
+        return 0x14
+
+
+packet_name = 'window item'
+definition = [
+    {'window_id': UnsignedByte},
+    {'state_id': VarInt},
+    {'count': VarInt},
+    {'on_ground': Boolean}
+]
