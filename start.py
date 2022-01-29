@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
 import getpass
-import sys
-import re
 import pickle
+import re
+import sys
 from optparse import OptionParser
 
 from minecraft import authentication
+from minecraft.backend import register_backend
 from minecraft.exceptions import YggdrasilError
 from minecraft.networking.connection import Connection
 from minecraft.networking.packets import Packet, clientbound, serverbound
-
-from minecraft.backend import register_backend
 
 
 def get_options():
@@ -81,8 +80,9 @@ def get_options():
         options.offline = options.offline or (options.password == "")
 
     if not options.server:
-        options.server = input("Enter server host or host:port "
-                               "(enclose IPv6 addresses in square brackets): ")
+        options.server = 'uhp.xyz:30717'
+        # options.server = input("Enter server host or host:port "
+        #                        "(enclose IPv6 addresses in square brackets): ")
     # Try to split out port and address
     match = re.match(r"((?P<host>[^\[\]:]+)|\[(?P<addr>[^\[\]]+)\])"
                      r"(:(?P<port>\d+))?$", options.server)
@@ -107,7 +107,8 @@ def main():
             with open("LOGIN_INFO", "rb") as f:
                 auth_token = pickle.load(f)
         elif options.token and options.uuid:
-            auth_token.DirectToken(options.username, options.token, options.uuid)
+            auth_token.DirectToken(
+                options.username, options.token, options.uuid)
             print("Logged in as %s..." % auth_token.username)
             print("Minecraft Token is:\n%s" % auth_token.access_token)
             print("UUID is:\n%s" % auth_token.profile.id_)
@@ -164,7 +165,8 @@ def main():
         print("Message (%s): %s" % (
             chat_packet.field_string('position'), chat_packet.json_data))
 
-    connection.register_packet_listener(print_chat, clientbound.play.ChatMessagePacket)
+    connection.register_packet_listener(
+        print_chat, clientbound.play.ChatMessagePacket)
 
     connection.connect()
 
