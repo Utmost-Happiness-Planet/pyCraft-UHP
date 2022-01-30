@@ -2,7 +2,7 @@ import math
 import time
 
 from minecraft.networking.connection import Connection
-from minecraft.operation import move
+from minecraft.operation import move, chat
 
 
 class Player:
@@ -37,3 +37,5 @@ class Player:
             distance, each_diff = move.calculate_distance(self.position, destination)
         move.player_move(self.connection, destination, self.rotation)
         print("移动完成。坐标为: x=%f, y=%f, z=%f" % (self.position[0], self.position[1], self.position[2]))
+    def send_message(self, message):
+        chat.send_message(self.connection, message)
