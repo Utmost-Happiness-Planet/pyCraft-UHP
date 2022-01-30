@@ -167,6 +167,7 @@ def main():
     connection.register_packet_listener(
         print_chat, clientbound.play.ChatMessagePacket)
 
+
     connection.connect()
 
     return connection

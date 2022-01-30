@@ -192,7 +192,7 @@ class PluginMessagePacket(AbstractPluginMessagePacket):
 
 
 class PlayerBlockPlacementPacket(Packet):
-    """Realizaton of http://wiki.vg/Protocol#Player_Block_Placement packet
+    """Realization of http://wiki.vg/Protocol#Player_Block_Placement packet
     Usage:
         packet = PlayerBlockPlacementPacket()
         packet.location = Position(x=1200, y=65, z=-420)

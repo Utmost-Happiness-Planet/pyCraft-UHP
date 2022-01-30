@@ -9,11 +9,11 @@ def calculate_distance(start: list[3], end: list[3]):
     return ans, [end[i] - start[i] for i in range(3)]
 
 
-def player_move(connection: Connection, dest: list[3], rotation: list[2]):
+def player_move(connection: Connection, destination: list[3], rotation: list[2]):
     pos_packet = PositionAndLookPacket()
-    pos_packet.x = dest[0]
-    pos_packet.feet_y = dest[1]
-    pos_packet.z = dest[2]
+    pos_packet.x = destination[0]
+    pos_packet.feet_y = destination[1]
+    pos_packet.z = destination[2]
     pos_packet.yaw = rotation[0]
     pos_packet.pitch = rotation[1]
     pos_packet.on_ground = True

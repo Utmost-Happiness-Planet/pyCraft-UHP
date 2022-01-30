@@ -139,7 +139,7 @@ class ChatMessagePacket(Packet):
     class Position(Enum):
         CHAT = 0       # A player-initiated chat message.
         SYSTEM = 1     # The result of running a command.
-        GAME_INFO = 2  # Displayed above the hotbar in vanilla clients.
+        GAME_INFO = 2  # Displayed above the hot bar in vanilla clients.
 
 
 class DisconnectPacket(Packet):
