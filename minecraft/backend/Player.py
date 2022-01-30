@@ -32,8 +32,10 @@ class Player:
         self.food = food
         self.food_saturation = food_saturation
 
-
     def move_to(self, destination: list[3]):
+        for i in range(0, len(destination)):
+            if destination[i] == '~':
+                destination[i] = self.position[i]
         # 先计算一下距离和三轴分别的距离差
         distance, each_diff = move.calculate_distance(self.position, destination)
         # 如果距离大于100就要分步移动了
