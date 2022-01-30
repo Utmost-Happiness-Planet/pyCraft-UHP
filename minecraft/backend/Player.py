@@ -33,9 +33,14 @@ class Player:
             move.player_move(self.connection, step_pos, self.rotation)
             print("移动中…坐标为: x=%f, y=%f, z=%f" % (self.position[0], self.position[1], self.position[2]))
             # 防止移动过快，因为我不知道移动判定中"速度"具体的算法，只能用延时来避免
-            time.sleep(0.5)
+            time.sleep(0.05)
             distance, each_diff = move.calculate_distance(self.position, destination)
         move.player_move(self.connection, destination, self.rotation)
         print("移动完成。坐标为: x=%f, y=%f, z=%f" % (self.position[0], self.position[1], self.position[2]))
+
+    def rotate_to(self, rotation: list[2]):
+        move.player_move(self.connection, self.position, rotation)
+        print("旋转完成。朝向为: yaw=%f, pitch=%f" % (self.rotation[0], self.rotation[1]))
+
     def send_message(self, message):
         chat.send_message(self.connection, message)
