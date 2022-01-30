@@ -51,6 +51,6 @@ def player.moveTo(self, destination: list[3])
 样例：
 
 ```python
-player.moveTo(self, [10, 20, 30])  # 从当前位置移动向x=10,y=20,z=30
+player.moveTo([10, 20, 30])  # 从当前位置移动向x=10,y=20,z=30
 ```
 

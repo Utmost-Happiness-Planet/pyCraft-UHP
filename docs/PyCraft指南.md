@@ -28,7 +28,7 @@ from minecraft.networking.packets.clientbound.play import PlayerPositionAndLookP
 
 # 使用listener装饰器注册一个监听器，装饰器实参为所监听包的类，函数形参为接收到的包
 @connection.listener(PlayerPositionAndLookPacket)
-def print_chat(_packet):
+def printPacket(_packet):
     print(_packet)
     # Your code...
 ```
@@ -90,6 +90,20 @@ def print_chat(_packet):
 >         # 根据不同的参数组合，在不同的监听器列表中添加PacketListener对象
 > ```
 
+你不仅能监听服务器服务器发来的包，也能监听你发给服务器的包。
+
+当我们向服务器发包改变自身状态时，这个操作尤其有用，不然我们失去对当前玩家状态的感知了。
+
+```python
+from minecraft.networking.packets.serverbound.play import PlayerPositionAndLookPacket
+
+# 使用listener装饰器注册一个监听器，装饰器实参为所监听包的类，函数形参为接收到的包
+@connection.listener(PlayerPositionAndLookPacket, outgoing=True)
+def printPacket(_packet):
+    print(_packet)
+    # Your code...
+```
+
 
 
 ## 从 Packet Writing 开始
@@ -125,6 +139,8 @@ definition = [
     {'message': String}]
 ```
 
+说明我们需要设置一个`message`字段。
+
 再举个例子，`PositionAndLookPacket`中有：
 
 ```python
@@ -141,7 +157,7 @@ definition = [
 
 ---
 
-最后我们只要记住，serverbound全是发送用包，clientbound全是监听用包。
+最后我们要知道，serverbound全是发送用包，clientbound全是监听用包，不要搞混了。
 
 
 
@@ -156,16 +172,20 @@ definition = [
 3. 若坐标合理服务端将更新服务端上的玩家位置
 4. 若不合理服务端不进行位置更新，并将当前服务端上玩家位置发回给客户端
 
-所谓判断合理即判断是否移动过快，判断的实现如下：
+> 所谓判断合理即判断是否移动过快，判断的实现如下：
+>
+> 1. 每一服务器刻，玩家当前的坐标被储存
+> 2. 当玩家移动时，计算移动后坐标与移动前坐标之差，记为向量 (Δx, Δy, Δz)
+> 3. 求该向量l2范数的平方，说人话就是求移动距离的平方，得 Δx² + Δy² + Δz²，记为①式
+> 4. 利用之前的玩家位置变化信息计算玩家的速度
+> 5. 利用玩家的速度估计其应该行走的距离，求该距离的平方即 velocityX² + velocityY² + velocityZ²，记为②式
+> 6. 若①式减②式大于100（若玩家装备鞘翅则大于300），判断为移动过快
 
-1. 每一服务器刻，玩家当前的坐标被储存
-2. 当玩家移动时，计算移动后坐标与移动前坐标之差，记为向量 (Δx, Δy, Δz)
-3. 求该向量l2范数的平方，说人话就是求移动距离的平方，得 Δx² + Δy² + Δz²，记为①式
-4. 利用之前的玩家位置变化信息计算玩家的速度
-5. 利用玩家的速度估计其应该行走的距离，求该距离的平方即 velocityX² + velocityY² + velocityZ²，记为②式
-6. 若①式减②式大于100（若玩家装备鞘翅则大于300），判断为移动过快
+不想这么麻烦地考虑的话，只要遵守每个坐标更新包之间欧式距离不超过 100 格就行。
 
-使用`PositionAndLookPacket`发送玩家的坐标信息，举个例子：
+---
+
+我们可以使用`PositionAndLookPacket`发送玩家的坐标信息，举个例子：
 
 （以后所有代码中的`connection`默认指已经建立连接的`connection`对象）
 
@@ -196,4 +216,14 @@ connection.write_packet(p)
 
 - yaw 是你左右转头（z 轴正方向为0，负方向为180，x 轴正方向270，负方向90）
 - pitch是你上下抬头低头（ 平视为0，抬头到顶为-90，低头到底为90）
+
+
+
+## 自定义数据包
+
+PyCraft并没有给太多的数据包类，这迫使我们想用一些功能时必须自己去写。
+
+好在 [wiki](https://wiki.vg/Protocol) 上对协议做了充分的解析，我们可以参考其中的内容构建数据包。
+
+
 

@@ -1,25 +1,22 @@
-from collections import deque
-from threading import RLock
-import zlib
-import threading
-import socket
-import timeit
-import select
-import sys
 import json
 import re
+import select
+import socket
+import sys
+import threading
+import timeit
+import zlib
+from collections import deque
+from threading import RLock
 
-from .types import VarInt
+from .. import (KNOWN_MINECRAFT_VERSIONS, PROTOCOL_VERSION_INDICES,
+                SUPPORTED_MINECRAFT_VERSIONS, SUPPORTED_PROTOCOL_VERSIONS,
+                utility)
+from ..exceptions import (IgnorePacket, InvalidState, LoginDisconnect,
+                          VersionMismatch)
+from . import encryption, packets
 from .packets import clientbound, serverbound
-from . import packets, encryption
-from .. import (
-    utility, KNOWN_MINECRAFT_VERSIONS, SUPPORTED_MINECRAFT_VERSIONS,
-    SUPPORTED_PROTOCOL_VERSIONS, PROTOCOL_VERSION_INDICES
-)
-from ..exceptions import (
-    VersionMismatch, LoginDisconnect, IgnorePacket, InvalidState
-)
-
+from .types import VarInt
 
 STATE_STATUS = 1
 STATE_PLAYING = 2
