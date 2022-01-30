@@ -8,6 +8,9 @@ from minecraft.operation import move, chat
 class Player:
     position = []
     rotation = []
+    health = 0
+    food = 0
+    food_saturation = 0
 
     def __init__(self, connection: Connection):
         self.connection = connection
@@ -23,6 +26,12 @@ class Player:
 
     def update_rotation(self, rotation: list[2]):
         self.rotation = rotation
+
+    def update_health(self, health, food, food_saturation):
+        self.health = health
+        self.food = food
+        self.food_saturation = food_saturation
+
 
     def move_to(self, destination: list[3]):
         # 先计算一下距离和三轴分别的距离差
