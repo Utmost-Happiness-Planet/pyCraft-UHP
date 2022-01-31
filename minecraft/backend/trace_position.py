@@ -9,11 +9,11 @@ def register_connection(c: Connection, player: Player):
 
     @connection.listener(PlayerPositionAndLookPacket)
     def print_position(_p):
-        print(f"玩家定位：x={_p.x}, y={_p.y}, z={_p.z}")
-        player.update_pos([_p.x, _p.y, _p.z])
-        player.update_rotation([_p.yaw, _p.pitch])
+        print("玩家定位：x=%f, y=%f,z =%f" % (_p.x, _p.y, _p.z))
+        player.set_pos([_p.x, _p.y, _p.z])
+        player.set_rotation([_p.yaw, _p.pitch])
 
     @connection.listener(PositionAndLookPacket, outgoing=True)
     def print_outgoing_position(_p):
-        player.update_pos([_p.x, _p.feet_y, _p.z])
-        player.update_rotation([_p.yaw, _p.pitch])
+        player.set_pos([_p.x, _p.feet_y, _p.z])
+        player.set_rotation([_p.yaw, _p.pitch])

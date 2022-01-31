@@ -320,7 +320,7 @@ class Position(Type, Vector):
 
         if context.protocol_later_eq(443):
             z = int((location >> 12) & 0x3FFFFFF)  # 26 intermediate bits
-            y = int(location & 0xFFF)              # 12 least signficant bits
+            y = int(location & 0xFFF)              # 12 least significant bits
         else:
             y = int((location >> 26) & 0xFFF)      # 12 intermediate bits
             z = int(location & 0x3FFFFFF)          # 26 least significant bits

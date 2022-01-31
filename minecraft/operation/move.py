@@ -5,15 +5,15 @@ from minecraft.networking.packets.serverbound.play import PositionAndLookPacket
 def calculate_distance(start: list[3], end: list[3]):
     ans = 0
     for i in range(3):
-        ans += (start[i] - end[i]) * (start[i] - end[i])
-    return ans, [end[i] - start[i] for i in range(3)]
+        ans += (start[i] - float(end[i])) * (start[i] - float(end[i]))
+    return ans, [float(end[i]) - start[i] for i in range(3)]
 
 
-def player_move(connection: Connection, dest: list[3], rotation: list[2]):
+def player_move(connection: Connection, destination: list[3], rotation: list[2]):
     pos_packet = PositionAndLookPacket()
-    pos_packet.x = dest[0]
-    pos_packet.feet_y = dest[1]
-    pos_packet.z = dest[2]
+    pos_packet.x = float(destination[0])
+    pos_packet.feet_y = float(destination[1])
+    pos_packet.z = float(destination[2])
     pos_packet.yaw = rotation[0]
     pos_packet.pitch = rotation[1]
     pos_packet.on_ground = True

@@ -8,7 +8,7 @@ from .Player import Player
 def register_backend(c: Connection):
     player = Player(c)
     trace_position.register_connection(c, player)
-    trace_block.register_connection(c, Player)
-    scan_other_players.register_connection(c, Player)
-    trace_health.register_connection(c, Player)
+    trace_block.register_connection(c, player)
+    scan_other_players.register_connection(c, player)
+    trace_health.register_connection(c, player)
     return player
