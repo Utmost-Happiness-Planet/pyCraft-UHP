@@ -1,6 +1,5 @@
 import json
 import re
-import select
 import socket
 import sys
 import threading
@@ -9,14 +8,16 @@ import zlib
 from collections import deque
 from threading import RLock
 
+import select
+
+from . import encryption, packets
+from .packets import clientbound, serverbound
+from .types import VarInt
 from .. import (KNOWN_MINECRAFT_VERSIONS, PROTOCOL_VERSION_INDICES,
                 SUPPORTED_MINECRAFT_VERSIONS, SUPPORTED_PROTOCOL_VERSIONS,
                 utility)
 from ..exceptions import (IgnorePacket, InvalidState, LoginDisconnect,
                           VersionMismatch)
-from . import encryption, packets
-from .packets import clientbound, serverbound
-from .types import VarInt
 
 STATE_STATUS = 1
 STATE_PLAYING = 2

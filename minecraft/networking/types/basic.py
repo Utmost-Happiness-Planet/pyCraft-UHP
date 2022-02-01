@@ -2,14 +2,13 @@
 Each type has a method which is used to read and write it.
 These definitions and methods are used by the packet definitions
 """
+import io
 import struct
 import uuid
-import io
 
 import pynbt
 
 from .utility import Vector, class_and_instancemethod
-
 
 __all__ = (
     'Type', 'Boolean', 'UnsignedByte', 'Byte', 'Short', 'UnsignedShort',
@@ -120,7 +119,7 @@ class FixedPoint(Type):
 
     def __init__(self, integer_type, fractional_bits=5):
         self.integer_type = integer_type
-        self.denominator = 2**fractional_bits
+        self.denominator = 2 ** fractional_bits
 
     def read(self, file_object):
         return self.integer_type.read(file_object) / self.denominator
@@ -316,14 +315,14 @@ class Position(Type, Vector):
     @staticmethod
     def read_with_context(file_object, context):
         location = UnsignedLong.read(file_object)
-        x = int(location >> 38)                # 26 most significant bits
+        x = int(location >> 38)  # 26 most significant bits
 
         if context.protocol_later_eq(443):
             z = int((location >> 12) & 0x3FFFFFF)  # 26 intermediate bits
-            y = int(location & 0xFFF)              # 12 least significant bits
+            y = int(location & 0xFFF)  # 12 least significant bits
         else:
-            y = int((location >> 26) & 0xFFF)      # 12 intermediate bits
-            z = int(location & 0x3FFFFFF)          # 26 least significant bits
+            y = int((location >> 26) & 0xFFF)  # 12 intermediate bits
+            z = int(location & 0x3FFFFFF)  # 26 least significant bits
 
         if x >= pow(2, 25):
             x -= pow(2, 26)
@@ -374,11 +373,13 @@ class PrefixedArray(Type):
     def read_with_context(self, file_object, context):
         def element_read(file_object):
             return self.element_type.read_with_context(file_object, context)
+
         return self.__read(file_object, element_read)
 
     def send_with_context(self, value, socket, context):
         def element_send(value, socket):
             return self.element_type.send_with_context(value, socket, context)
+
         return self.__send(value, socket, element_send)
 
     def __read(self, file_object, element_read):
