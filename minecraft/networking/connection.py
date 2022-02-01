@@ -138,6 +138,8 @@ class Connection(object):
         self.outgoing_packet_listeners = []
         self.early_outgoing_packet_listeners = []
         self._exception_handlers = []
+        self.player_list = {}
+        self.block_query_list = {}
 
         def proto_version(version):
             if isinstance(version, str):
@@ -476,6 +478,9 @@ class Connection(object):
                     self.file_object.close()
                     self.socket.close()
                     self.socket = None
+
+    def add_player(self, player):
+        self.player_list[player.uuid] = player
 
     def _handshake(self, next_state=STATE_PLAYING):
         handshake = serverbound.handshake.HandShakePacket()
