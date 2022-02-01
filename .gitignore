@@ -89,3 +89,6 @@ credentials
 
 ### LOGIN_INFO ###
 LOGIN_INFO
+
+### Test Files ###
+test/
