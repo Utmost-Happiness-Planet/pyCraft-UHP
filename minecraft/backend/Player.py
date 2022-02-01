@@ -6,26 +6,69 @@ from minecraft.operation import move, chat
 
 
 class Player:
-    position = []
-    rotation = []
-    health = 0
-    food = 0
-    food_saturation = 0
+    def __init__(self):
+        self.position = []
+        self.rotation = []
+        self.id = 0
+        self.uuid = ''
+        self.on_ground = True
 
-    def __init__(self, connection: Connection):
-        self.connection = connection
-
-    def get_pos(self):
+    def get_position(self):
         return self.position
 
     def get_rotation(self):
         return self.rotation
 
-    def set_pos(self, pos: list[3]):
+    def get_id(self):
+        return self.id
+
+    def get_uuid(self):
+        return self.uuid
+
+    def get_ground(self):
+        return self.on_ground
+
+    def set_position(self, pos: list[3]):
         self.position = pos
 
     def set_rotation(self, rotation: list[2]):
         self.rotation = rotation
+
+    def set_id(self, id):
+        self.id = id
+
+    def set_uuid(self, uuid):
+        self.uuid = uuid
+
+    def set_ground(self, on_ground):
+        self.on_ground = on_ground
+
+    def __add__(self, pos: list[3]):
+        dest = self.get_position()
+        ans = []
+        for i in range(0, 3):
+            ans.append(dest[i] + pos[i])
+        return ans
+
+
+class PlayerSelf(Player):
+
+    def __init__(self, connection: Connection):
+        super(PlayerSelf, self).__init__()
+
+        self.connection = connection
+
+        self.health = 0
+        self.food = 0
+        self.food_saturation = 0
+        self.set_uuid(self.connection.auth_token.profile.id_)
+
+    def get_health(self):
+        return [self.health, self.food, self.food_saturation]
+
+    def set_uuid(self, id_):
+        # 拼接uuid
+        self.uuid = '-'.join([id_[:7], id_[7:11], id_[11:15], id_[15:19], id_[19:]])
 
     def set_health(self, health: float, food: int, food_saturation: float) -> None:
         self.health = health
@@ -55,3 +98,9 @@ class Player:
 
     def send_message(self, message):
         chat.send_message(self.connection, message)
+
+    def query_block(self, position: list[3], id):
+        for i in range(0, len(position)):
+            if position[i] == '~':
+                position[i] = int(self.position[i])
+        block_query.query_block(self.connection,position, id)

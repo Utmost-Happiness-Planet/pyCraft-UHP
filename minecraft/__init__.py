@@ -506,7 +506,7 @@ PROTOCOL_VERSION_INDICES = {}
 
 
 def initglobals(use_known_records=False):
-    '''Initialise the above global variables, using
+    """Initialise the above global variables, using
        'SUPPORTED_MINECRAFT_VERSIONS' as the source if 'use_known_records' is
        False (for backward compatibility, this is the default behaviour), or
        otherwise using 'KNOWN_MINECRAFT_VERSION_RECORDS' as the source.
@@ -516,7 +516,7 @@ def initglobals(use_known_records=False):
        during runtime and then the derived data to be updated as well, to allow
        for dynamic version support. All updates are done by reference to allow
        this to work elsewhere in the code.
-    '''
+    """
     if use_known_records:
         # Update the variables that depend on KNOWN_MINECRAFT_VERSION_RECORDS.
         KNOWN_MINECRAFT_VERSIONS.clear()
