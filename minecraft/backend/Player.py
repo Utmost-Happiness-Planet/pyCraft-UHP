@@ -2,7 +2,7 @@ import math
 import time
 
 from minecraft.networking.connection import Connection
-from minecraft.operation import move, chat
+from minecraft.operation import move, chat, block_query
 
 
 class Player:

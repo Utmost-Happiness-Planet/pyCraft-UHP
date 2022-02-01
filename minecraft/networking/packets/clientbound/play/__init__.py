@@ -46,7 +46,8 @@ def get_packets(context):
         PluginMessagePacket,
         PlayerListHeaderAndFooterPacket,
         EntityLookPacket,
-        ResourcePackSendPacket
+        ResourcePackSendPacket,
+        NBTQueryPacket
     }
 
     if context.protocol_earlier_eq(47):
@@ -431,11 +432,23 @@ class WindowItemsPacket(Packet):
     def get_id(context):
         return 0x14
 
+    packet_name = 'window item'
+    definition = [
+        {'window_id': UnsignedByte},
+        {'state_id': VarInt},
+        {'count': VarInt},
+        {'on_ground': Boolean}
+    ]
 
-packet_name = 'window item'
-definition = [
-    {'window_id': UnsignedByte},
-    {'state_id': VarInt},
-    {'count': VarInt},
-    {'on_ground': Boolean}
-]
+
+class NBTQueryPacket(Packet):
+    @staticmethod
+    def get_id(context):
+        return 0x60
+
+    packet_name = 'nbt query response'
+
+    definition = [
+        {'transaction_id': VarInt},
+        {'nbt': NBT}
+    ]

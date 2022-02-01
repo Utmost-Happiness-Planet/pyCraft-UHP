@@ -279,3 +279,15 @@ class ResourcePackStatusPacket(Packet):
     definition = [
         {"result": VarInt}
     ]
+
+
+class QueryBlockNBTPacket(Packet):
+    @staticmethod
+    def get_id(context):
+        return 0x01
+
+    packet_name = "query block nbt"
+    definition = [
+        {"transaction_id": VarInt},
+        {"location": Position}
+    ]
