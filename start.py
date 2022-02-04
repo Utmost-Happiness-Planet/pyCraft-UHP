@@ -80,10 +80,8 @@ def get_options():
         options.offline = options.offline or (options.password == "")
 
     if not options.server:
-        options.server = 'localhost:52584'
-        # options.server = 'uhp.xyz:30717'
-        # options.server = input("Enter server host or host:port "
-        #                        "(enclose IPv6 addresses in square brackets): ")
+        options.server = input("Enter server host or host:port "
+                               "(enclose IPv6 addresses in square brackets): ")
     # Try to split out port and address
     match = re.match(r"((?P<host>[^\[\]:]+)|\[(?P<addr>[^\[\]]+)\])"
                      r"(:(?P<port>\d+))?$", options.server)
