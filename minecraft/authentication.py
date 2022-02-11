@@ -3,8 +3,8 @@ import uuid
 
 import requests
 
-from .exceptions import YggdrasilError
 from .MicrosoftAuthentication import GetLoginInfo
+from .exceptions import YggdrasilError
 
 #: The base url for Ygdrassil requests
 AUTH_SERVER = "https://authserver.mojang.com"
@@ -265,7 +265,7 @@ class AuthenticationToken(object):
             server_id - ``str`` with the server id
 
         Returns:
-            ``True`` if no errors occured
+            ``True`` if no errors occurred
 
         Raises:
             :class:`minecraft.exceptions.YggdrasilError`

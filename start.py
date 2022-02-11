@@ -10,7 +10,7 @@ from minecraft import authentication
 from minecraft.backend import register_backend
 from minecraft.exceptions import YggdrasilError
 from minecraft.networking.connection import Connection
-from minecraft.networking.packets import Packet, clientbound, serverbound
+from minecraft.networking.packets import Packet, clientbound
 
 
 def get_options():
@@ -80,9 +80,8 @@ def get_options():
         options.offline = options.offline or (options.password == "")
 
     if not options.server:
-        options.server = 'uhp.xyz:30717'
-        # options.server = input("Enter server host or host:port "
-        #                        "(enclose IPv6 addresses in square brackets): ")
+        options.server = input("Enter server host or host:port "
+                               "(enclose IPv6 addresses in square brackets): ")
     # Try to split out port and address
     match = re.match(r"((?P<host>[^\[\]:]+)|\[(?P<addr>[^\[\]]+)\])"
                      r"(:(?P<port>\d+))?$", options.server)

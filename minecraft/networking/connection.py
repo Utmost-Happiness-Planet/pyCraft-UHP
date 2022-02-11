@@ -1,6 +1,5 @@
 import json
 import re
-import select
 import socket
 import sys
 import threading
@@ -9,14 +8,16 @@ import zlib
 from collections import deque
 from threading import RLock
 
+import select
+
+from . import encryption, packets
+from .packets import clientbound, serverbound
+from .types import VarInt
 from .. import (KNOWN_MINECRAFT_VERSIONS, PROTOCOL_VERSION_INDICES,
                 SUPPORTED_MINECRAFT_VERSIONS, SUPPORTED_PROTOCOL_VERSIONS,
                 utility)
 from ..exceptions import (IgnorePacket, InvalidState, LoginDisconnect,
                           VersionMismatch)
-from . import encryption, packets
-from .packets import clientbound, serverbound
-from .types import VarInt
 
 STATE_STATUS = 1
 STATE_PLAYING = 2
@@ -137,6 +138,8 @@ class Connection(object):
         self.outgoing_packet_listeners = []
         self.early_outgoing_packet_listeners = []
         self._exception_handlers = []
+        self.player_list = {}
+        self.block_query_list = {}
 
         def proto_version(version):
             if isinstance(version, str):
@@ -475,6 +478,9 @@ class Connection(object):
                     self.file_object.close()
                     self.socket.close()
                     self.socket = None
+
+    def add_player(self, player):
+        self.player_list[player.uuid] = player
 
     def _handshake(self, next_state=STATE_PLAYING):
         handshake = serverbound.handshake.HandShakePacket()
