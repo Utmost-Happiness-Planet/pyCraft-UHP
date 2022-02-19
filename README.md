@@ -49,5 +49,6 @@ python ./start.py -f
 - [x] 支持玩家移动操作
 - [ ] 支持玩家放置方块操作 - Attempting
 - [ ] 监听世界方块信息
-- [ ] 解析原理图文件的模块 - Attempting
+- [x] 解析原理图文件的模块
+- [ ] 完善原理图模块 - Attempting
 - [ ] 编写自动建造算法
