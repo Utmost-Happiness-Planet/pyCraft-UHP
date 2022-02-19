@@ -22,7 +22,10 @@ class Schematic:
     def _getAt(self, index: int) -> int:
         i1 = (index * self.entryLength) // 64
         i2 = (index * self.entryLength) % 64
-        return int(bin(self.bitArray[i1])[2:][i2:i2+self.entryLength], 2)
+        bitArray = bin(self.bitArray[i1])[2:]
+        if len(bitArray) % self.entryLength:
+            bitArray = bitArray.rjust(len(bitArray) + (self.entryLength - len(bitArray) % self.entryLength), '0')
+        return int(bitArray[i2:i2+self.entryLength], 2)
 
     def _getBlock(self, index: int):
         return self.blockState[index]
@@ -38,3 +41,5 @@ class Block:
     def getName(self):
         return self.tag[0]
 
+    def getState(self):
+        pass
