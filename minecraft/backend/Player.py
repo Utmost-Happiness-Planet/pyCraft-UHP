@@ -2,7 +2,7 @@ import math
 import time
 
 from minecraft.networking.connection import Connection
-from minecraft.operation import move, chat, block_query
+from minecraft.operation import move, chat, block_query, block_place
 
 
 class Player:
@@ -103,4 +103,7 @@ class PlayerSelf(Player):
         for i in range(0, len(position)):
             if position[i] == '~':
                 position[i] = int(self.position[i])
-        block_query.query_block(self.connection,position, id)
+        block_query.query_block(self.connection, position, id)
+
+    def place_block(self, x: int, y: int, z: int):
+        block_place.place_block(self.connection, x, y, z)
