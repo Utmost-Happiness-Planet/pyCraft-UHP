@@ -92,3 +92,6 @@ LOGIN_INFO
 
 ### Test Files ###
 test/
+
+### Debug Config ###
+.run
